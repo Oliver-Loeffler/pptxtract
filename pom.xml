@@ -16,7 +16,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.7.0</version>
+            <version>4.7.5</version>
         </dependency>
     </dependencies>
     <build>
@@ -89,6 +89,8 @@
                             <windirchooser>true</windirchooser>
                             <winupgradeuuid>d7603671-ece2-49cc-8e13-af69a2d3a4a8</winupgradeuuid>
                             <winconsole>true</winconsole>
+							<winshortcut>true</winshortcut>
+							<winmenu>true</winmenu>
                             <resourcedir>src/main/packaging</resourcedir>
                             <temp>target/jpackage_temp</temp>
                             <verbose>true</verbose>
