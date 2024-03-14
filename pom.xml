@@ -8,7 +8,7 @@
  <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>19</java.version>
+        <java.version>17</java.version>
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
         <maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
     </properties>
@@ -89,8 +89,6 @@
                             <windirchooser>true</windirchooser>
                             <winupgradeuuid>d7603671-ece2-49cc-8e13-af69a2d3a4a8</winupgradeuuid>
                             <winconsole>true</winconsole>
-							<winshortcut>true</winshortcut>
-							<winmenu>true</winmenu>
                             <resourcedir>src/main/packaging</resourcedir>
                             <temp>target/jpackage_temp</temp>
                             <verbose>true</verbose>
