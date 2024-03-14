@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <title>pptxtract</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid p-5 bg-primary text-white text-center">
+  <h1>pptxtract</h1>
+  <p>Command line interface utility to extract embedded files and URLs from PowerPoint 2007 or later pptx files</p> 
+</div>
+  
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>What is pptxtract?</h3>
+      <p>Command line utility to extract references to external linked and embedded files and URLs to websites. Works with PowerPoint 2007 or later. Requires just the JDK and PicoCLI, no other dependencies yet.</p>
+    </div>
+    <div class="col-sm-6">
+      <h3>Usage:</h3>
+      <pre>
+        C:\>pptxtract TestData\powerpoint\Slideshow.pptx
+        Slideshow.pptx;File1.txt
+        Slideshow.pptx;image.bmp
+        Slideshow.pptx;File3.ini
+        Slideshow.pptx;File2.csv
+      </pre>
+      or:
+      <pre>
+        C:\>type pptfiles.txt | pptxtract
+        Slideshow1.pptx;File1.txt
+        Slideshow2.pptx;image.bmp
+        Slideshow3.pptx;File3.ini
+        Slideshow4.pptx;File2.csv
+      </pre>
+      <pre>
+        Usage: pptxtract [-hoVx] FILE...
+              FILE...                 PowerPoint FILE(S) where paths to embedded or
+                                      linked documents shall be extracted. Must be of
+                                      PowerPoint 2007 format (or later versions).
+                                      Older *.ppt files must be converted into
+                                      PowerPoint 2007 (or newer) format before use.
+           -h, --help                 Show this help message and exit.
+           -o                         When extracting embedded files, this option will
+                                      force overwriting existing files.
+           -V, --version              Print version information and exit.
+           -x, --extract-embeddings   When set, embedded files such as *.docx, *.xlsx or
+                                      other *.pptx files will be extracted.
+      </pre>
+    </div>
+    <div class="col-sm-2">
+      <h3>Code</h3>
+      <p><a href="https://github.com/Oliver-Loeffler/pptxtract">Github</a></p>
+      <p><a href="https://github.com/Oliver-Loeffler/pptxtract/blob/master/LICENSE">Apache 2 License</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
