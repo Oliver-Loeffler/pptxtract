@@ -193,7 +193,13 @@ public class PPTXtract implements Callable<Integer>{
     }
         
     public static void main(String[] args) {
-        var commandLine = new CommandLine(new PPTXtract());
+        CommandLine commandLine = new CommandLine(new PPTXtract());
+        String[] paramsAndOptions = readStdinWhenAvailable(args);
+        int exitCode = commandLine.execute(paramsAndOptions);
+        System.exit(exitCode);
+    }
+
+    private static String[] readStdinWhenAvailable(String[] args) {
         List<String> stdInItems = new ArrayList<>();
         try (InputStreamReader isr = new InputStreamReader(System.in);
              BufferedReader reader = new BufferedReader(isr)) {
@@ -216,7 +222,6 @@ public class PPTXtract implements Callable<Integer>{
         String[] paramsAndOptions = new String[params.length+args.length];
         System.arraycopy(params,0,paramsAndOptions,0,params.length);
         System.arraycopy(args, 0, paramsAndOptions, params.length, args.length);
-        int exitCode = commandLine.execute(paramsAndOptions);
-        System.exit(exitCode);
+        return paramsAndOptions;
     }
 }
