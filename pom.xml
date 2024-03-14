@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.raumzeitfalle</groupId>
   <artifactId>pptxtract</artifactId>
-  <version>0.0.8</version>
+  <version>0.0.9</version>
   <name>pptxtract</name>
   <description>Command line utility to extract references to external files from given PowerPoint slideshows. Supports PowerPoint 2007 or later PPTX/OOXML format,</description>
  <properties>

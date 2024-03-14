@@ -38,7 +38,7 @@ import picocli.CommandLine.Parameters;
  * 
  */
 @Command(name="pptxtract",
-         version = "0.0.8",
+         version = "0.0.9",
          mixinStandardHelpOptions = true)
 public class PPTXtract implements Callable<Integer>{
 
