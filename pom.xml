@@ -90,6 +90,7 @@
                             <winupgradeuuid>d7603671-ece2-49cc-8e13-af69a2d3a4a8</winupgradeuuid>
                             <winconsole>true</winconsole>
                             <resourcedir>src/main/packaging</resourcedir>
+                            <licensefile>src/main/packaging/License.rtf</licensefile>
                             <temp>target/jpackage_temp</temp>
                             <verbose>true</verbose>
                             <type>MSI</type>
