@@ -71,7 +71,7 @@ public class PPTXtract implements Callable<Integer>{
                                                                      "pptx","ppt",
                                                                      "pdf",
                                                                      "txt","csv","ini",
-                                                                     "bmp","jpg","tiff","tif",
+                                                                     "bmp","jpg","jpeg","tiff","tif",
                                                                      "wav");
     
     @Override
