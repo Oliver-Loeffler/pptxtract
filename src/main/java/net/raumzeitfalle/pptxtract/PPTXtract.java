@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -65,7 +66,13 @@ public class PPTXtract implements Callable<Integer>{
     
     private final Set<String> processedFiles = new HashSet<>();
     
-    private final String extractableFileNameExtensions = "xlsx|xls|docx|doc|pptx|ppt|pdf|txt";
+    private final Set<String> extractableFileNameExtensions = Set.of("xlsx","xls",
+                                                                     "docx","doc",
+                                                                     "pptx","ppt",
+                                                                     "pdf",
+                                                                     "txt","csv","ini",
+                                                                     "bmp","jpg","tiff","tif",
+                                                                     "wav");
     
     @Override
     public Integer call() throws Exception {
@@ -103,13 +110,14 @@ public class PPTXtract implements Callable<Integer>{
         
         int exitCode = 0;
         Path source = Path.of(sourceFile).toAbsolutePath().normalize();
+        String extractableExtensions = extractableFileNameExtensions.stream().collect(Collectors.joining("|"));
         try (ZipFile zipFile = new ZipFile(source.toFile())) {
             Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
             while(zipEntries.hasMoreElements()) {
                 ZipEntry entry = zipEntries.nextElement();
                 String entryName = entry.getName();
                 if (entryName.toLowerCase()
-                             .matches("^ppt[/]embeddings[/].*[.]("+extractableFileNameExtensions+")$")) {
+                             .matches("^ppt[/]embeddings[/].*[.]("+extractableExtensions+")$")) {
                     if (extractEmbeddings && !entry.isDirectory()) {
                         String targetName = Path.of(entryName).getFileName().toString();
                         Path localTarget = source.getParent().resolve(targetName);
