@@ -38,3 +38,7 @@ Usage: pptxtract [-hoVx] FILE...
   -x, --extract-embeddings   When set, embedded files such as *.docx, *.xlsx or
                                other *.pptx files will be extracted.
 ```
+
+## Privacy Policy
+
+This program does not track or collect any data.
