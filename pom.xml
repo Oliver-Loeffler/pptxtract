@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.raumzeitfalle</groupId>
   <artifactId>pptxtract</artifactId>
-  <version>0.0.9</version>
+  <version>0.0.12</version>
   <name>pptxtract</name>
   <description>Command line utility to extract references to external files from given PowerPoint slideshows. Supports PowerPoint 2007 or later PPTX/OOXML format,</description>
  <properties>
@@ -73,7 +73,8 @@
                         <configuration>
                             <name>pptxtract</name>
                             <appversion>${project.version}</appversion>
-                            <copyright>2023 Oliver Löffler, https://pptxtract.net</copyright>
+                            <copyright>2024 Oliver Löffler</copyright>
+                            <title>pptxtract</title>
                             <description>${project.description}</description>
                             <module>net.raumzeitfalle.pptxtract/net.raumzeitfalle.pptxtract.PPTXtract</module>
                             <modulepath>
@@ -90,6 +91,8 @@
                             <winupgradeuuid>d7603671-ece2-49cc-8e13-af69a2d3a4a8</winupgradeuuid>
                             <vendor>Oliver Löffler</vendor>
                             <winconsole>true</winconsole>
+                            <abouturl>https://pptxtract.net/</abouturl>
+                            <winupdateurl>https://pptxtract.net/</winupdateurl>
                             <resourcedir>src/main/packaging</resourcedir>
                             <licensefile>src/main/packaging/License.rtf</licensefile>
                             <temp>target/jpackage_temp</temp>
