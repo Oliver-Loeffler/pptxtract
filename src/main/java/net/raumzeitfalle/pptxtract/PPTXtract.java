@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ import picocli.CommandLine.Parameters;
  * 
  */
 @Command(name="pptxtract",
-         version = "0.0.9",
+         version = "0.0.15",
          mixinStandardHelpOptions = true)
 public class PPTXtract implements Callable<Integer>{
 
@@ -53,7 +54,12 @@ public class PPTXtract implements Callable<Integer>{
     @Option(names = {"-x", "--extract-embeddings"},
             description = "When set, embedded files such as *.docx, *.xlsx or other *.pptx files will be extracted.",
             defaultValue = "false")
-    Boolean extractEmbeddings; 
+    Boolean extractEmbeddings;
+    
+    @Option(names = {"-i", "--extract-images"},
+            description = "When defined, imagfe files such as *.png, *.wmf or *.emf will be extracted as well.",
+            defaultValue = "false")
+    Boolean extractMedia; 
     
     @Option(names = {"-o"},
             description = "When extracting embedded files, this option will force overwriting existing files.",
@@ -66,13 +72,20 @@ public class PPTXtract implements Callable<Integer>{
     
     private final Set<String> processedFiles = new HashSet<>();
     
-    private final Set<String> extractableFileNameExtensions = Set.of("xlsx","xls",
-                                                                     "docx","doc",
-                                                                     "pptx","ppt",
-                                                                     "pdf",
-                                                                     "txt","csv","ini",
-                                                                     "bmp","jpg","jpeg","tiff","tif",
-                                                                     "wav");
+    private final Set<String> extractableMediaExtensions = Set.of("png", "bmp", "dib", "wmf", "emf", "jpg");
+    
+    private final Set<String> extractableFileNameExtensions = merge(extractableMediaExtensions, "xlsx","xls", 
+                                                                    "docx","doc", "pptx","ppt",
+                                                                     "pdf", "txt","csv","ini",
+                                                                     "tiff", "tif", "wav");
+    
+    private static Set<String> merge(Set<String> set, String ... other) {
+        Set<String> merged = new HashSet<>(set);
+        for (String s : other) {
+            merged.add(s);
+        }
+        return Collections.unmodifiableSet(merged); 
+    }
     
     @Override
     public Integer call() throws Exception {
@@ -110,44 +123,21 @@ public class PPTXtract implements Callable<Integer>{
         
         int exitCode = 0;
         Path source = Path.of(sourceFile).toAbsolutePath().normalize();
+        String extractableMediaFileExtensions = extractableMediaExtensions.stream().collect(Collectors.joining("|"));
         String extractableExtensions = extractableFileNameExtensions.stream().collect(Collectors.joining("|"));
         try (ZipFile zipFile = new ZipFile(source.toFile())) {
             Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
             while(zipEntries.hasMoreElements()) {
                 ZipEntry entry = zipEntries.nextElement();
                 String entryName = entry.getName();
-                if (entryName.toLowerCase()
-                             .matches("^ppt[/]embeddings[/].*[.]("+extractableExtensions+")$")) {
+                if (entryName.toLowerCase().matches("^ppt[/]embeddings[/].*[.]("+extractableExtensions+")$")) {
                     if (extractEmbeddings && !entry.isDirectory()) {
-                        String targetName = Path.of(entryName).getFileName().toString();
-                        Path localTarget = source.getParent().resolve(targetName);
-                        int copyCount = 1;
-                        while(!overwriteExistingFiles && Files.exists(localTarget)) {
-                            var split = targetName.lastIndexOf('.');
-                            copyCount++;
-                            var counter = "("+copyCount+")";
-                            if (split > 0) {
-                                var head = targetName.substring(0, split);
-                                var tail = targetName.substring(split);
-                                localTarget = source.getParent().resolve(head+counter+tail);
-                            } else {
-                                localTarget = source.getParent().resolve(targetName+counter);
-                            }
-                        }
-                        try (InputStream is = zipFile.getInputStream(entry);
-                             OutputStream os = new FileOutputStream(localTarget.toFile())) {
-                            byte[] buffer = new byte[8 * 1024];
-                            int bytesRead;
-                            while ((bytesRead = is.read(buffer)) != -1) {
-                                os.write(buffer, 0, bytesRead);
-                            }
-                            stdout.println(sourceFile+";"+localTarget.toAbsolutePath());
-                        } catch (IOException error) {
-                            stderr.println("Failed to extract embedded file: " + targetName);
-                            if (exitCode < 5) {
-                                exitCode = 5;
-                            }
-                        }
+                        exitCode = handleEmbeddedFile(sourceFile, exitCode, source, zipFile, entry, entryName, "embedded");
+                    }
+                }
+                if (entryName.toLowerCase().matches("^ppt[/]media[/].*[.]("+extractableMediaFileExtensions+")$")) {
+                    if (extractMedia && !entry.isDirectory()) {
+                        exitCode = handleEmbeddedFile(sourceFile, exitCode, source, zipFile, entry, entryName, "media");
                     }
                 }
                 if (entryName.matches("^ppt[/]slides[/]_rels[/]slide\\d+[.]xml[.]rels$")) {
@@ -175,7 +165,7 @@ public class PPTXtract implements Callable<Integer>{
                                         }
                                     }
                                 }
-                            }                
+                            }
                         }
                     } catch (IOException ioError) {
                         stderr.println("Failed to read OOXML file.");
@@ -195,6 +185,39 @@ public class PPTXtract implements Callable<Integer>{
             stderr.println("Failed to extract embedded/linked files from given OOXML/PPTX file.");
             if (exitCode < 4) {
                 exitCode = 4;
+            }
+        }
+        return exitCode;
+    }
+
+    private int handleEmbeddedFile(String sourceFile, int exitCode, Path source, ZipFile zipFile, ZipEntry entry, String entryName, String type) {
+        String targetName = Path.of(entryName).getFileName().toString();
+        Path localTarget = source.getParent().resolve(targetName);
+        int copyCount = 1;
+        while(!overwriteExistingFiles && Files.exists(localTarget)) {
+            var split = targetName.lastIndexOf('.');
+            copyCount++;
+            var counter = "("+copyCount+")";
+            if (split > 0) {
+                var head = targetName.substring(0, split);
+                var tail = targetName.substring(split);
+                localTarget = source.getParent().resolve(head+counter+tail);
+            } else {
+                localTarget = source.getParent().resolve(targetName+counter);
+            }
+        }
+        try (InputStream is = zipFile.getInputStream(entry);
+             OutputStream os = new FileOutputStream(localTarget.toFile())) {
+            byte[] buffer = new byte[8 * 1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            stdout.println(sourceFile+";"+localTarget.toAbsolutePath()+";("+type+")");
+        } catch (IOException error) {
+            stderr.println("Failed to extract "+type+" file: " + targetName);
+            if (exitCode < 5) {
+                exitCode = 5;
             }
         }
         return exitCode;
