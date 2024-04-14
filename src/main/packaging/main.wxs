@@ -72,7 +72,7 @@
       <ComponentGroupRef Id="Shortcuts"/>
       <ComponentGroupRef Id="Files"/>
       <ComponentGroupRef Id="FileAssociations"/>
-      <Component Id="pathEnvironmentVariable" Guid="7dc666ce-967d-4c88-b36e-2625a385c0e7" KeyPath="yes" Directory="TARGETDIR">
+      <Component Id="pathEnvironmentVariable" Guid="c003c931-0238-487c-bfef-7a2d4381ae0b" KeyPath="yes" Directory="TARGETDIR">
         <Environment Id="MyPathVariable" Name="Path" Value="[INSTALLDIR]" Action="set" System="no" Permanent="no" Part="last" Separator=";" />
       </Component>
     </Feature>
