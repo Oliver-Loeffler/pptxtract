@@ -40,7 +40,7 @@ import picocli.CommandLine.Parameters;
  * 
  */
 @Command(name="pptxtract",
-         version = "0.0.15",
+         version = "0.0.18",
          mixinStandardHelpOptions = true)
 public class PPTXtract implements Callable<Integer>{
 
@@ -57,7 +57,7 @@ public class PPTXtract implements Callable<Integer>{
     Boolean extractEmbeddings;
     
     @Option(names = {"-i", "--extract-images"},
-            description = "When defined, imagfe files such as *.png, *.wmf or *.emf will be extracted as well.",
+            description = "When defined, image files such as *.png, *.wmf or *.emf will be extracted as well.",
             defaultValue = "false")
     Boolean extractMedia; 
     

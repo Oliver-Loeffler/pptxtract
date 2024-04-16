@@ -12,6 +12,8 @@
   <?define JpInstallerVersion=200 ?>
   <?define JpCompressedMsi=yes ?>
 
+  <?include $(var.JpConfigDir)/overrides.wxi ?>
+
   <?ifdef JpAllowUpgrades ?>
     <?define JpUpgradeVersionOnlyDetectUpgrade="no"?>
   <?else?>
@@ -22,8 +24,6 @@
   <?else?>
     <?define JpUpgradeVersionOnlyDetectDowngrade="yes"?>
   <?endif?>
-
-  <?include $(var.JpConfigDir)/overrides.wxi ?>
 
   <Product
     Id="$(var.JpProductCode)"
@@ -36,6 +36,7 @@
     <Package
       Description="$(var.JpAppDescription)"
       Manufacturer="$(var.JpAppVendor)"
+	  Comments="$(var.JpAppDescription)"
       InstallerVersion="$(var.JpInstallerVersion)"
       Compressed="$(var.JpCompressedMsi)"
       InstallScope="$(var.JpInstallScope)" Platform="x64"
@@ -68,11 +69,11 @@
     <!-- Standard required root -->
     <Directory Id="TARGETDIR" Name="SourceDir"/>
 
-    <Feature Id="DefaultFeature" Title="!(loc.MainFeatureTitle)" Level="1">
+    <Feature Id="DefaultFeature" Title="!(loc.MainFeatureTitle)"  Description="pptxtract CLI tool" Level="1">
       <ComponentGroupRef Id="Shortcuts"/>
       <ComponentGroupRef Id="Files"/>
       <ComponentGroupRef Id="FileAssociations"/>
-      <Component Id="pathEnvironmentVariable" Guid="c003c931-0238-487c-bfef-7a2d4381ae0b" KeyPath="yes" Directory="TARGETDIR">
+      <Component Id="pathEnvironmentVariable" Guid="928d2440-b287-4ea3-9506-63e58651336a" KeyPath="yes" Directory="TARGETDIR">
         <Environment Id="MyPathVariable" Name="Path" Value="[INSTALLDIR]" Action="set" System="no" Permanent="no" Part="last" Separator=";" />
       </Component>
     </Feature>
@@ -98,6 +99,13 @@
     <Property Id="ARPPRODUCTICON" Value="JpARPPRODUCTICON"/>
     <Icon Id="JpARPPRODUCTICON" SourceFile="$(var.JpIcon)"/>
     <?endif?>
+    
+    
+    <Property Id="ARPURLINFOABOUT"  Value="https://github.com/Oliver-Loeffler/pptxtract"        />
+    <Property Id="ARPURLUPDATEINFO" Value="https://github.com/Oliver-Loeffler/pptxtract"        />
+    <Property Id="ARPREADME"        Value="https://github.com/Oliver-Loeffler/pptxtract"        />
+    <Property Id="ARPHELPLINK"      Value="https://github.com/Oliver-Loeffler/pptxtract/issues" />
+    <Property Id="ARPCONTACT"       Value="Oliver Löffler"                                      />
 
     <UIRef Id="JpUI"/>
 
