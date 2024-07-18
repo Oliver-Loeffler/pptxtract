@@ -74,7 +74,6 @@
                             <name>pptxtract</name>
                             <appversion>${project.version}</appversion>
                             <copyright>2024 Oliver Löffler</copyright>
-                            <title>pptxtract</title>
                             <description>${project.description}</description>
                             <module>net.raumzeitfalle.pptxtract/net.raumzeitfalle.pptxtract.PPTXtract</module>
                             <modulepath>
@@ -89,10 +88,8 @@
                             <winperuserinstall>true</winperuserinstall>
                             <windirchooser>true</windirchooser>
                             <winupgradeuuid>d7603671-ece2-49cc-8e13-af69a2d3a4a8</winupgradeuuid>
-                            <vendor>Oliver Löffler</vendor>
+                            <vendor>Open Source Developer, OLIVER LÖFFLER</vendor>
                             <winconsole>true</winconsole>
-                            <abouturl>https://pptxtract.net/</abouturl>
-                            <winupdateurl>https://pptxtract.net/</winupdateurl>
                             <resourcedir>src/main/packaging</resourcedir>
                             <licensefile>src/main/packaging/License.rtf</licensefile>
                             <temp>target/jpackage_temp</temp>
